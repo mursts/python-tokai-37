@@ -1,0 +1,7 @@
+runtime: python37
+service: 2nd-gen
+
+handlers:
+- url: /static
+  secure: always
+  static_dir: static
