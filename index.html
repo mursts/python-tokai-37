@@ -1,0 +1,289 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Python x Google App Engine</title>
+    <meta name="description" content="Python x Google App Engine" >
+    <script>
+      var notesEnabled =true;
+      var sections = [];
+      var titleNotes = [];
+    </script>
+    <meta charset='utf-8'>
+
+    <meta property="og:title" content="Python x Google App Engine">
+    <meta property="og:description" content="Python x Google App Engine">
+
+    <meta name="twitter:title" content="Python x Google App Engine">
+    <meta name="twitter:description" content="Python x Google App Engine">
+    <meta name="twitter:card" content="summary">
+
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/css/notes.css" type="text/css" />
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script>
+    </script>
+  </head>
+  <body style='display: none'>
+    
+  <div class="section" id="python-x-google-app-engine">
+<h1>Python x Google App Engine<a class="headerlink" href="#python-x-google-app-engine" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line">Python東海 x Unagi.py 合同勉強会</div>
+<div class="line">2018.10.27</div>
+<div class="line">&#64;mursts</div>
+</div>
+<div class="section" id="id1">
+<h2>お前誰よ<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p><strong>三浦 智 (&#64;mursts)</strong></p>
+<ul class="simple">
+<li>Python東海 管理人の1人</li>
+<li>Python Boot Camp<ul>
+<li>愛知 現地スタッフ</li>
+<li>静岡 TA</li>
+</ul>
+</li>
+<li>GCPUG Nagoya オーガナイザー</li>
+</ul>
+<img alt="_images/comunity.jpg" src="_images/comunity.jpg" />
+</div>
+<div class="section" id="id2">
+<h2>今日話すこと<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>Google App Engineについて</p>
+<blockquote>
+<div>デモしながらApp Engineの特徴をお伝えします</div></blockquote>
+</div>
+<div class="section" id="id3">
+<h2>動機<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>私の観測している範囲では「Herokuで動かしてみた」が多いので、
+Webアプリを作った時にApp Engineを使う人が増えてほしい</p>
+</div>
+<div class="section" id="app-engine-paas">
+<h2>なぜApp Engine(PaaS)<a class="headerlink" href="#app-engine-paas" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="web">
+<h2>Webアプリはどの環境で動かしていますか？<a class="headerlink" href="#web" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>自宅サーバ、Raspberry Pi</li>
+<li>VPS</li>
+<li>クラウドサービス<ul>
+<li>GCP、AWS、Azure、Heroku …</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="id4">
+<h2>Webアプリって作るだけじゃないですよね<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p>どれを使おう</p>
+<ul class="simple">
+<li>uWSGI</li>
+<li>gunicorn</li>
+<li>mod_wsgi</li>
+<li>Nginx Unit</li>
+</ul>
+<p>本番環境で Flaskの <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">main.py</span></code> とか Djangoの <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">manage.py</span> <span class="pre">runserver</span></code> で動かしませんよね？あくまでも開発用</p>
+</div>
+<div class="section" id="id5">
+<h2>Webアプリって作るだけじゃないですよね<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<p>Webサーバはいる？</p>
+<ul>
+<li><p class="first">Nginx</p>
+</li>
+<li><p class="first">Apache</p>
+</li>
+<li><p class="first">IIS</p>
+<p><code class="docutils literal notranslate"><span class="pre">nginx.conf</span></code> や <code class="docutils literal notranslate"><span class="pre">httpd.conf</span></code> 設定できますか？</p>
+</li>
+</ul>
+<p class="presenter-notes">Web Server Gateway Inerface -&gt; PythonとAPサーバをつなぐ仕様</p>
+</div>
+<div class="section" id="id6">
+<h2>突然来る(とうれしい場合もある)大量アクセス<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Internal Server Error</p>
+</li>
+<li><p class="first">Service Temporarily Unavailable</p>
+<p>ボトルネックはどこ？ CPU？メモリ？ディスク？</p>
+</li>
+</ul>
+</div>
+<div class="section" id="paas">
+<h2>そんな時はPaaSの出番<a class="headerlink" href="#paas" title="Permalink to this headline">¶</a></h2>
+<p>できないものはやってもらう</p>
+<p>アプリを作るだけに集中したい</p>
+</div>
+<div class="section" id="google-app-engine">
+<h2>Google App Engine<a class="headerlink" href="#google-app-engine" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="id7">
+<h2>Google App Engine<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<p>Google App Engine(GAE)とはGoogleが提供するPaasでGCPのサービスの1つ</p>
+<p>開発者はアプリケーションを作ることに専念できる</p>
+<img alt="_images/appengine.png" src="_images/appengine.png" />
+</div>
+<div class="section" id="id8">
+<h2>Google App Engine<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>コンテナ上でアプリケーションが動く</li>
+<li>リクエストが発生するとインスタンスを起動して、なくなればインスタンスも落ちる</li>
+</ul>
+<p class="presenter-notes">Borgの話→Kubernetes</p>
+</div>
+<div class="section" id="id9">
+<h2>Google App Engine<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
+<p>現在App Engineには3つのタイプが存在する</p>
+<ul class="simple">
+<li>Starndard Environment<ul>
+<li>First Generation</li>
+<li>Second Generation (Beta)</li>
+</ul>
+</li>
+<li>Frexible Environment &lt;- 今日は触れません</li>
+</ul>
+</div>
+<div class="section" id="standard-environment">
+<h2>Standard Environment<a class="headerlink" href="#standard-environment" title="Permalink to this headline">¶</a></h2>
+<p>First Generation (昔からあるやつ)</p>
+<ul class="simple">
+<li>Python 2.7、Java 7、PHP 5.5、Go 1.6 〜 1.9</li>
+<li>ローカルファイルアクセス不可</li>
+<li>外部リクエストは専用APIを使用（requestsはパッチを当てないと）</li>
+<li>メール送受信</li>
+<li>画像API<ul>
+<li>Google Cloud Storageにある画像を扱う</li>
+<li>URLに引数をサイズを指定するだけでリサイズしてくれる</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="id10">
+<h2>Standard Environment<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
+<p>Second Generation(Beta)</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/google/gvisor">gVisor</a> ベースのコンテナ</li>
+<li>Python 3.7、Java 8、PHP 7.2、Node.js 8、Go 1.11</li>
+<li><cite>/tmp</cite> 以下にファイルを保存できる</li>
+<li>外部リクエストは自由</li>
+<li><a class="reference external" href="https://medium.com/google-cloud-jp/gae-standard-with-scikit-learn-dff5ad1a0ea">scikit-learnが動く</a></li>
+</ul>
+</div>
+<div class="section" id="frexible-environment">
+<h2>Frexible Environment<a class="headerlink" href="#frexible-environment" title="Permalink to this headline">¶</a></h2>
+<p>GAE環境でコンテナを動かせる</p>
+</div>
+<div class="section" id="app-engine">
+<h2>App Engineの特徴<a class="headerlink" href="#app-engine" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="id11">
+<h2>高速スピンアップ<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Go：30ms</li>
+<li>Python、PHP：300ms</li>
+<li>Java：3000ms</li>
+</ul>
+<p class="presenter-notes">StackDriverのログ</p>
+</div>
+<div class="section" id="id12">
+<h2>オートスケーリング<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>アクセスがくるとコンテナを起動する</li>
+<li>アクセス数に応じて起動するコンテナの数を制御<ul>
+<li>みんなが寝てる時間はコンテナは落ちている</li>
+</ul>
+</li>
+</ul>
+<p class="presenter-notes">画像を見せる
+ヒルナンデス</p>
+</div>
+<div class="section" id="id13">
+<h2>料金<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>毎月の無料枠がある</li>
+<li>アクセスが無ければ料金は発生しない</li>
+</ul>
+<p class="presenter-notes">一日5000件のアクセスで月3000円切るくらい
+全てが動的アクセスではない</p>
+</div>
+<div class="section" id="id14">
+<h2>バージョニング<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>ブルーグリーンデプロイ</li>
+<li>カナリアリリース</li>
+</ul>
+<p class="presenter-notes">事前に別バージョンを準備してバージョンを変えてみる</p>
+</div>
+<div class="section" id="stackdriver">
+<h2>StackDriver<a class="headerlink" href="#stackdriver" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Logging</li>
+<li>Monitoring</li>
+<li>Alert</li>
+<li>Debugger</li>
+</ul>
+</div>
+<div class="section" id="ssl">
+<h2>SSLにも対応<a class="headerlink" href="#ssl" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>デフォルトでSSLに対応</li>
+<li>独自ドメインにも対応</li>
+<li>無料</li>
+</ul>
+<p class="presenter-notes">secure:alwaysのベージを開く
+.ioのドメインを紐づけておく
+設定画面を見せる</p>
+</div>
+<div class="section" id="id15">
+<h2>静的サイトのホスティング<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>転送量のみでスタティックサーバから配信できる</li>
+<li>Googleの強力なキャッシュサーバにのる<ul>
+<li>キャッシュにのれば無料</li>
+</ul>
+</li>
+</ul>
+<p><a class="reference external" href="https://medium.com/google-cloud-jp/%E9%9D%99%E7%9A%84%E3%82%B5%E3%82%A4%E3%83%88%E3%83%9B%E3%82%B9%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E7%82%BA%E3%81%AEgcs-gae-firebase-hosting%E6%AF%94%E8%BC%83-e7d406609f2e">静的サイトホスティングの為のGCS/GAE/Firebase Hosting比較</a></p>
+<p class="presenter-notes">ブログをGAEでホスティングしているのを紹介</p>
+</div>
+<div class="section" id="id16">
+<h2>便利機能<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>タスクキュー</li>
+<li>cron</li>
+<li>Memcache (First Gen)</li>
+<li>アクセス制御<ul>
+<li>Googleアカウント、G Suite</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="id17">
+<h2>デモ<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="id18">
+<h2>まとめ<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h2>
+<p>App Engineを使うことで</p>
+<ul class="simple">
+<li>運用いらずでアプリを作るのに集中できる</li>
+<li>大量アクセスでもぐっすり眠れる</li>
+<li>個人的にGoogleのインフラで動いているという安心感</li>
+</ul>
+<p>まだ触ったことがない人は一度使ってみてはいかがでしょうか。</p>
+</div>
+<div class="section" id="id19">
+<h2>ありがとうございました<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+  </body>
+  <div id="help">
+      Use the left and right arrow keys or click the left and right
+      edges of the page to navigate between slides.<br>
+      (Press 'H' or navigate to hide this message.)
+  </div>
+  <script type="text/javascript" src="_static/js/init.js"></script>
+  <script type="text/javascript" src="_static/js/notes.js"></script>
+  <script type="text/javascript" src="_static/js/slides.js"></script>
+</html>
